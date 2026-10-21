@@ -1,0 +1,8 @@
+{
+  "appId": "id.shintashop.app",
+  "appName": "Shinta Shop",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}
