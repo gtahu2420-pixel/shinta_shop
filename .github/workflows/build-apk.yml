@@ -1,0 +1,62 @@
+
+name: Build Shinta Shop APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract starter ZIP
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unzip
+          mkdir starter
+          unzip shinta-shop-apk-starter.zip -d starter
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: starter/app
+        run: npm install
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Build web app
+        working-directory: starter/app
+        run: npm run build
+
+      - name: Add Android platform
+        working-directory: starter/app
+        run: npx cap add android
+
+      - name: Sync Android
+        working-directory: starter/app
+        run: npx cap sync android
+
+      - name: Build APK
+        working-directory: starter/app
+        run: |
+          chmod +x android/gradlew
+          cd android
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: shinta-shop-debug-apk
+          path: starter/app/android/app/build/outputs/apk/debug/app-debug.apk
+          
