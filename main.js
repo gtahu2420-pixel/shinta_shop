@@ -193,11 +193,19 @@ function render() {
         return;
       }
 
-      token=data.access_token;
-      user={id:data.user.id,name:f.get('name') || data.user.email,email:data.user.email,role:'customer'};
-      await loadProfile();
-      user.email=data.user.email;
-      render();
+      token = data.access_token;
+localStorage.setItem('ss_token', token);
+
+user = {
+  id: data.user.id,
+  name: f.get('name') || data.user.email,
+  email: data.user.email,
+  role: 'customer'
+};
+
+await loadProfile();
+user.email = data.user.email;
+render();
     }catch(err){alert(err.message);}
   };
 
