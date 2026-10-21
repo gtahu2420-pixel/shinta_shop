@@ -209,11 +209,18 @@ render();
     }catch(err){alert(err.message);}
   };
 
-  const logout=document.querySelector('[data-logout]');
-  if(logout)logout.onclick=async()=>{
-    try{await request('/auth/v1/logout',{method:'POST'});}catch(e){}
-    token='';user=null;render();
-  };
+  
+const logout = document.querySelector('[data-logout]');
+if (logout) logout.onclick = async () => {
+  try {
+    await request('/auth/v1/logout', { method: 'POST' });
+  } catch (e) {}
+
+  token = '';
+  localStorage.removeItem('ss_token');
+  user = null;
+  render();
+};
 
   const checkout=document.querySelector('[data-checkout]');
   if(checkout)checkout.onclick=async()=>{
